@@ -1,0 +1,104 @@
+﻿@model IEnumerable<BookWeb.Models.Book>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-striped">
+            
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Isbn)
+                    </th>
+                    <th>
+                        @Html.DisplayName("Img")
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BookName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Author)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Year)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Genre)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Place)
+                    </th>
+                    <th></th>
+                </tr>
+            
+            
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @if (item.ImgUrl != null)
+                        {
+                            foreach (var url in item.ImgUrl)
+                            {
+                                <img style="width:30px;height:10px;margin:4px;" src="images/@url"/>
+                            }
+                        }
+                        else
+                        {
+                            <img style="width:30px;height:10px;margin:4px;" src="images/no-image.png"/>
+                        }
+                    </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Isbn)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BookName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Author)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Year)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Genre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Place)
+                        </td>
+                        <td><a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Isbn">Düzenle</a>
+                            <a href="javascript:void(0)" id="silButon" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Isbn">Sil</a></td>
+                        
+                    </tr>
+                }
+            
+        </table>
+        <div class="col">
+            <a a class="btn btn-primary" asp-action="Create">Yeni Kayıt</a>
+            <a a class="btn btn-primary" asp-action="Index">Anasayfa</a>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#silButon").click(function () {
+            $.ajax({
+                url: "@Url.Action("Delete")",
+                data: { id: $(this.attr("asp-route-id")) },
+                type: "POST"
+                success: function () {
+                    $(this).parent().parent().hide(500);
+
+                }
+            });
+        });
+    });
+</script>
